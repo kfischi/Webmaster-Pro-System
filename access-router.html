@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>גישה למערכת - WebMaster Pro</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .access-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            overflow: hidden;
+            max-width: 800px;
+            width: 100%;
+        }
+
+        .header {
+            background: linear-gradient(45deg, #2c3e50, #34495e);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+
+        .access-options {
+            padding: 40px 30px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .access-card {
+            background: #f8f9fa;
+            border: 3px solid #ecf0f1;
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .access-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: left 0.5s;
+        }
+
+        .access-card:hover::before {
+            left: 100%;
+        }
+
+        .access-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
+
+        .client-card {
+            border-color: #d4af37;
+        }
+
+        .client-card:hover {
+            border-color: #b8941f;
+            background: linear-gradient(135deg, #fffacd 0%, #fff8dc 100%);
+        }
+
+        .admin-card {
+            border-color: #e74c3c;
+        }
+
+        .admin-card:hover {
+            border-color: #c0392b;
+            background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
+        }
+
+        .access-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .access-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+
+        .access-description {
+            color: #7f8c8d;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .access-features {
+            text-align: right;
+            margin-bottom: 25px;
+        }
+
+        .access-features li {
+            color: #666;
+            margin-bottom: 8px;
+            font-size: 0.9em;
+        }
+
+        .access-button {
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .client-card .access-button {
+            background: linear-gradient(45deg, #d4af37, #b8941f);
+        }
+
+        .admin-card .access-button {
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
+        }
+
+        .access-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+
+        .demo-section {
+            background: #f8f9fa;
+            padding: 30px;
+            text-align: center;
+            border-top: 1px solid #ecf0f1;
+        }
+
+        .demo-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+
+        .demo-description {
+            color: #7f8c8d;
+            margin-bottom: 20px;
+        }
+
+        .demo-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .demo-btn {
+            background: #95a5a6;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9em;
+        }
+
+        .demo-btn:hover {
+            background: #7f8c8d;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .access-options {
+                grid-template-columns: 1fr;
+            }
+            
+            .demo-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .demo-btn {
+                width: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="access-container">
+        <div class="header">
+            <h1>🚀 WebMaster Pro</h1>
+            <p>מערכת ניהול אתרים מתקדמת</p>
+        </div>
+
+        <div class="access-options">
+            <div class="access-card client-card" onclick="accessClient()">
+                <div class="access-icon">👤</div>
+                <div class="access-title">גישת לקוח</div>
+                <div class="access-description">
+                    ממשק פשוט ונקי לעריכת האתר שלכם
+                </div>
+                
+                <ul class="access-features">
+                    <li>✅ עריכת תוכן האתר</li>
+                    <li>✅ ניהול שירותים ומחירים</li>
+                    <li>✅ עדכון גלריית תמונות</li>
+                    <li>✅ ניהול מאמרים</li>
+                    <li>✅ תצוגה מקדימה חיה</li>
+                    <li>✅ ממשק ידידותי למשתמש</li>
+                </ul>
+                
+                <button class="access-button">
+                    🏥 כניסה כלקוח
+                </button>
+            </div>
+
+            <div class="access-card admin-card" onclick="accessAdmin()">
+                <div class="access-icon">👑</div>
+                <div class="access-title">גישת אדמין</div>
+                <div class="access-description">
+                    ניהול מלא של כל המערכת והלקוחות
+                </div>
+                
+                <ul class="access-features">
+                    <li>🔧 עריכה מתקדמת של כל האתרים</li>
+                    <li>👥 ניהול מלא של לקוחות</li>
+                    <li>📊 דוחות ואנליטיקס</li>
+                    <li>🚀 פרסום ופריסה</li>
+                    <li>⚙️ הגדרות מערכת</li>
+                    <li>🔒 ניהול הרשאות ואבטחה</li>
+                </ul>
+                
+                <button class="access-button">
+                    👑 כניסה כאדמין
+                </button>
+            </div>
+        </div>
+
+        <div class="demo-section">
+            <div class="demo-title">🎯 גישה מהירה למערכות</div>
+            <div class="demo-description">
+                דרכים נוספות לגשת למרכיבי המערכת השונים
+            </div>
+            
+            <div class="demo-buttons">
+                <button class="demo-btn" onclick="openGallery()">
+                    🎨 גלריית אתרים
+                </button>
+                <button class="demo-btn" onclick="openEditor()">
+                    🔧 עורך מתקדם
+                </button>
+                <button class="demo-btn" onclick="openWebsite()">
+                    🌐 צפה באתר
+                </button>
+                <button class="demo-btn" onclick="openReports()">
+                    📊 דוחות מנהלים
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // פונקציות גישה ראשיות
+        function accessClient() {
+            console.log('👤 גישת לקוח נבחרה');
+            
+            // בדיקה איזה לקוח
+            const clientChoice = prompt(`👤 גישת לקוח\n\nבחר את הלקוח שלך:\n\n1️⃣ קליניקת יופי פרמיום\n2️⃣ מעצב פנים יוקרתי\n3️⃣ אתרים אחרים (בפיתוח)\n\nהקלד מספר:`, '1');
+            
+            if (clientChoice === '1') {
+                console.log('🏥 פותח עורך כללי לקליניקת יופי פרמיום...');
+                showLoadingAndRedirect('universal-website-editor.html?website=beauty-clinic', 'טוען עורך כללי...');
+            } else if (clientChoice === '2') {
+                console.log('🏠 פותח עורך כללי למעצב פנים...');
+                showLoadingAndRedirect('universal-website-editor.html?website=interior-design', 'טוען עורך כללי...');
+            } else if (clientChoice === '3') {
+                alert('🚧 אתרים נוספים עדיין בפיתוח\n\nכרגע זמין:\n✅ קליניקת יופי פרמיום\n✅ מעצב פנים יוקרתי');
+            } else {
+                alert('👤 ברירת מחדל: פותח עורך כללי לקליניקת יופי פרמיום');
+                showLoadingAndRedirect('universal-website-editor.html?website=beauty-clinic', 'טוען עורך כללי...');
+            }
+        }
+
+        function accessAdmin() {
+            console.log('👑 גישת אדמין נבחרה');
+            
+            // סימולציה של אימות אדמין
+            const adminPassword = prompt('👑 כניסת אדמין\n\nהכנס סיסמת אדמין:', '');
+            
+            if (adminPassword === 'admin123' || adminPassword === 'webmaster' || adminPassword === '') {
+                console.log('✅ אימות אדמין הצליח');
+                showLoadingAndRedirect('admin-dashboard.html', 'טוען לוח בקרה אדמין...');
+            } else {
+                alert('❌ סיסמה שגויה!\n\nלבדיקה: השתמש ב-"admin123" או הדק OK ללא סיסמה');
+            }
+        }
+
+        // פונקציות גישה מהירה
+        function openGallery() {
+            console.log('🎨 פותח גלריית אתרים...');
+            showLoadingAndRedirect('websites-gallery.html', 'טוען גלריית אתרים...');
+        }
+
+        function openEditor() {
+            console.log('🔧 פותח עורך כללי...');
+            showLoadingAndRedirect('universal-website-editor.html', 'טוען עורך כללי...');
+        }
+
+        function openWebsite() {
+            console.log('🌐 פותח אתר קליניקת יופי פרמיום...');
+            // יצירת תצוגה מקדימה מובנית
+            const previewWindow = window.open('', '_blank', 'width=1200,height=800');
+            previewWindow.document.write(`
+                <!DOCTYPE html>
+                <html dir="rtl">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>קליניקת יופי פרמיום</title>
+                    <style>
+                        body { 
+                            font-family: Arial; 
+                            margin: 0; 
+                            padding: 20px; 
+                            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+                        }
+                        .container { 
+                            max-width: 1000px; 
+                            margin: 0 auto; 
+                            background: white; 
+                            border-radius: 20px; 
+                            overflow: hidden;
+                            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+                        }
+                        .header { 
+                            background: linear-gradient(45deg, #d4af37, #f7dc6f); 
+                            color: white; 
+                            padding: 60px 40px; 
+                            text-align: center; 
+                        }
+                        .header h1 { 
+                            font-size: 3em; 
+                            margin-bottom: 15px; 
+                        }
+                        .content { padding: 50px 40px; }
+                        .section { margin-bottom: 50px; }
+                        .section h2 { color: #d4af37; font-size: 2em; margin-bottom: 25px; }
+                        .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; }
+                        .service-card { background: #f8f9fa; padding: 30px; border-radius: 15px; text-align: center; }
+                        .service-name { font-weight: bold; margin-bottom: 10px; }
+                        .service-price { color: #d4af37; font-size: 1.5em; font-weight: bold; }
+                    </style>
+                </head>
+                <body>
+                    <div class="container">
+                        <div class="header">
+                            <h1>קליניקת יופי פרמיום</h1>
+                            <p>מובילים בטכנולוגיות האסתטיקה המתקדמות</p>
+                        </div>
+                        <div class="content">
+                            <div class="section">
+                                <h2>השירותים שלנו</h2>
+                                <div class="services-grid">
+                                    <div class="service-card">
+                                        <div class="service-name">הזרקות בוטוקס מתקדמות</div>
+                                        <div class="service-price">₪800</div>
+                                    </div>
+                                    <div class="service-card">
+                                        <div class="service-name">מילוי קמטים</div>
+                                        <div class="service-price">₪1,200</div>
+                                    </div>
+                                    <div class="service-card">
+                                        <div class="service-name">טיפולי לייזר</div>
+                                        <div class="service-price">₪900</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </body>
+                </html>
+            `);
+        }
+
+        function openReports() {
+            console.log('📊 פותח דוחות מנהלים...');
+            showLoadingAndRedirect('admin-dashboard.html', 'טוען דוחות מנהלים...');
+        }
+
+        // פונקציה להצגת טעינה ומעבר
+        function showLoadingAndRedirect(url, message) {
+            // יצירת מסך טעינה
+            const loadingOverlay = document.createElement('div');
+            loadingOverlay.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.8);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 9999;
+                color: white;
+                font-family: inherit;
+                flex-direction: column;
+            `;
+            
+            loadingOverlay.innerHTML = `
+                <div style="text-align: center;">
+                    <div style="font-size: 3em; margin-bottom: 20px;">🚀</div>
+                    <div style="font-size: 1.5em; margin-bottom: 20px;">${message}</div>
+                    <div style="width: 200px; height: 4px; background: rgba(255,255,255,0.3); border-radius: 2px; overflow: hidden;">
+                        <div style="width: 0%; height: 100%; background: #3498db; animation: loading 2s ease-in-out;"></div>
+                    </div>
+                </div>
+                
+                <style>
+                    @keyframes loading {
+                        0% { width: 0%; }
+                        50% { width: 70%; }
+                        100% { width: 100%; }
+                    }
+                </style>
+            `;
+            
+            document.body.appendChild(loadingOverlay);
+            
+            // מעבר לעמוד אחרי 2 שניות
+            setTimeout(() => {
+                window.location.href = url;
+            }, 2000);
+        }
+
+        // אנימציות טעינה
+        window.addEventListener('load', function() {
+            console.log('🚀 מערכת הגישה נטענה בהצלחה!');
+            
+            // אפקט הופעה לכרטיסים
+            const cards = document.querySelectorAll('.access-card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(50px)';
+                
+                setTimeout(() => {
+                    card.style.transition = 'all 0.6s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 200);
+            });
+            
+            // הודעת ברכה
+            setTimeout(() => {
+                console.log('👋 ברוכים הבאים ל-WebMaster Pro!\n\n✨ מערכת ניהול אתרים מתקדמת\n🎯 ממשקים מותאמים ללקוחות ואדמינים\n🚀 טכנולוגיה חדשנית ופשוטה לשימוש');
+            }, 1000);
+        });
+
+        // הודעות מצב מערכת
+        setInterval(() => {
+            console.log('🟢 כל המערכות פעילות ותקינות');
+        }, 30000);
+    </script>
+</body>
+</html>
