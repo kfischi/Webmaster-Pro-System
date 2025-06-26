@@ -679,7 +679,11 @@
         // פונקציות לפעולות
         function editWebsite(websiteId) {
             if (websiteId === 'beauty-clinic' || websiteId === 'interior-designer') {
-                window.open(`universal-website-editor.html?site=${websiteId}`, '_blank');
+                try {
+                    window.open(`/universal-website-editor.html?site=${websiteId}`, '_blank');
+                } catch (error) {
+                    window.open(`./universal-website-editor.html?site=${websiteId}`, '_blank');
+                }
             } else {
                 alert('האתר עדיין בתכנון ולא זמין לעריכה.\nנתחיל בפיתוח בקרוב!');
             }
@@ -748,9 +752,12 @@
             alert('📈 אנליטיקס כללי\n\nמציג:\n• סטטיסטיקות תנועה\n• מגמות צמיחה\n• ביצועי אתרים\n• דירוג שביעות רצון\n• תחזיות עתידיות');
         }
 
-function goBack() {
-    window.location.href = './access-router.html';
-}
+        function goBack() {
+            try {
+                window.location.href = '/';
+            } catch (error) {
+                window.location.href = '/index.html';
+            }
         }
 
         // טעינת האתרים בעת פתיחת הדף
