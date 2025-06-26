@@ -456,7 +456,11 @@
         // פונקציות לפעולות
         function editWebsite(websiteId) {
             if (websiteId === 'beauty-clinic' || websiteId === 'interior-designer') {
-              window.open('./universal-website-editor.html?site=' + websiteId, '_blank');
+                try {
+                    window.open('/universal-website-editor.html?site=' + websiteId, '_blank');
+                } catch (error) {
+                    window.open('./universal-website-editor.html?site=' + websiteId, '_blank');
+                }
             } else {
                 alert('העורך עדיין לא מוכן לאתר זה.\nהאתר עדיין בשלב התכנון.');
             }
@@ -484,9 +488,12 @@
             alert(`🚀 תהליך הבנייה של האתר יחל בקרוב!\n\nהאתר "${websites.find(w => w.id === websiteId).name}" ייכנס לשלב הפיתוח במהלך השבועיים הקרובים.\n\nנעדכן אותך ברגע שהעורך יהיה מוכן!`);
         }
 
-     function goBack() {
-    window.location.href = './access-router.html';
-}
+        function goBack() {
+            try {
+                window.location.href = '/';
+            } catch (error) {
+                window.location.href = '/index.html';
+            }
         }
 
         // פונקציה ליצירת אתר קליניקת יופי מלא
@@ -578,7 +585,11 @@
 
     <script>
         function editSite() {
-            window.open('universal-website-editor.html?site=beauty-clinic', '_blank');
+            try {
+                window.open('/universal-website-editor.html?site=beauty-clinic', '_blank');
+            } catch (error) {
+                window.open('./universal-website-editor.html?site=beauty-clinic', '_blank');
+            }
         }
     </script>
 </body>
@@ -664,7 +675,11 @@
 
     <script>
         function editSite() {
-            window.open('universal-website-editor.html?site=interior-designer', '_blank');
+            try {
+                window.open('/universal-website-editor.html?site=interior-designer', '_blank');
+            } catch (error) {
+                window.open('./universal-website-editor.html?site=interior-designer', '_blank');
+            }
         }
     </script>
 </body>
