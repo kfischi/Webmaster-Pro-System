@@ -757,9 +757,12 @@
         }
 
         // פונקציה לחזרה
-     function goBack() {
-    window.location.href = './websites-gallery.html';
-}
+        function goBack() {
+            try {
+                window.location.href = '/websites-gallery.html';
+            } catch (error) {
+                window.location.href = './websites-gallery.html';
+            }
         }
 
         // האזנה לשינויים בטפסים
