@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WebMaster Pro - מערכת ניהול אתרים מתקדמת</title>
+    <title>WebMaster Pro - מערכת ניהול אתרים</title>
     <style>
         * {
             margin: 0;
@@ -15,15 +15,27 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
+            color: #333;
         }
 
         .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* דף הבית */
+        .home-page {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            flex-direction: column;
+        }
+
+        .home-card {
             background: rgba(255,255,255,0.95);
-            padding: 40px;
+            padding: 50px;
             border-radius: 20px;
             box-shadow: 0 15px 35px rgba(0,0,0,0.1);
             text-align: center;
@@ -44,7 +56,6 @@
             color: #333;
             font-size: 2.5rem;
             margin-bottom: 15px;
-            font-weight: bold;
         }
 
         .subtitle {
@@ -68,7 +79,6 @@
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s ease;
-            text-decoration: none;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -90,175 +100,749 @@
             box-shadow: 0 10px 25px rgba(0,0,0,0.2);
         }
 
-        .client-btn:hover {
-            box-shadow: 0 10px 25px rgba(79, 172, 254, 0.4);
+        /* דפים פנימיים */
+        .page {
+            display: none;
+            min-height: 100vh;
+            padding: 20px 0;
         }
 
-        .admin-btn:hover {
-            box-shadow: 0 10px 25px rgba(240, 147, 251, 0.4);
+        .page.active {
+            display: block;
         }
 
-        .features {
-            margin-top: 30px;
-            padding-top: 30px;
-            border-top: 2px solid #e0e0e0;
+        .header {
+            background: rgba(255,255,255,0.95);
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            text-align: center;
+            position: relative;
         }
 
-        .features h3 {
-            color: #333;
-            margin-bottom: 15px;
-            font-size: 1.1rem;
+        .back-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255,255,255,0.9);
+            color: #667eea;
+            border: 2px solid #667eea;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
         }
 
-        .features-list {
+        .back-btn:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .header h1 {
+            color: #667eea;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        /* גלריית אתרים */
+        .stats-bar {
+            background: rgba(255,255,255,0.95);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 10px;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-label {
             color: #666;
-            font-size: 0.9rem;
-            line-height: 1.6;
+            margin-top: 5px;
         }
 
-        .features-list li {
-            list-style: none;
-            margin-bottom: 5px;
+        .websites-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
         }
 
-        .features-list li:before {
-            content: "✅ ";
-            margin-left: 10px;
+        .website-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .website-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-header {
+            padding: 20px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            position: relative;
+        }
+
+        .card-header.ready {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        .status-badge {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            background: rgba(255,255,255,0.2);
+        }
+
+        .card-title {
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+            margin-top: 30px;
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .website-description {
+            color: #666;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .btn-edit {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-view {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        /* עורך */
+        .editor-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            min-height: calc(100vh - 200px);
+        }
+
+        .editor-panel, .preview-panel {
+            background: rgba(255,255,255,0.95);
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .panel-header {
+            background: #667eea;
+            color: white;
+            padding: 15px 20px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .panel-content {
+            padding: 20px;
+            max-height: calc(100vh - 300px);
+            overflow-y: auto;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .services-section {
+            border: 2px dashed #e0e0e0;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .service-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .service-item input, .service-item textarea {
+            margin-bottom: 10px;
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .preview-content {
+            background: white;
+            min-height: 400px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .preview-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+
+        .preview-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: white;
+        }
+
+        .preview-services {
+            padding: 40px 20px;
+            background: #f8f9fa;
+        }
+
+        .preview-services h2 {
+            text-align: center;
+            color: #667eea;
+            margin-bottom: 30px;
+            font-size: 2rem;
+        }
+
+        .preview-services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .preview-service-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-left: 4px solid #667eea;
+        }
+
+        .preview-service-card h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .preview-service-price {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #764ba2;
+        }
+
+        .live-indicator {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #28a745;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
         }
 
         @media (max-width: 768px) {
-            .container {
-                padding: 30px 20px;
+            .editor-container {
+                grid-template-columns: 1fr;
             }
             
-            h1 {
-                font-size: 2rem;
+            .access-buttons {
+                flex-direction: column;
             }
             
-            .subtitle {
-                font-size: 1rem;
+            .stats-bar {
+                flex-direction: column;
+                text-align: center;
             }
             
-            .access-btn {
-                padding: 15px 20px;
-                font-size: 1.1rem;
+            .websites-grid {
+                grid-template-columns: 1fr;
             }
         }
 
-        .loading {
+        .hidden { display: none; }
+        .success-message {
+            background: #28a745;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
             display: none;
-            margin-top: 20px;
-            color: #666;
-        }
-
-        .spinner {
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #667eea;
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 10px;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="logo">🌐</div>
-        <h1>WebMaster Pro</h1>
-        <p class="subtitle">מערכת ניהול אתרים מתקדמת<br>בחר את סוג הגישה המתאים לך</p>
-        
-        <div class="access-buttons">
-            <button class="access-btn client-btn" onclick="openClientPortal()">
-                <span>👤</span>
-                <span>גישת לקוח</span>
-            </button>
-            
-            <button class="access-btn admin-btn" onclick="openAdminDashboard()">
-                <span>👑</span>
-                <span>גישת מנהל</span>
-            </button>
+    <!-- דף הבית -->
+    <div id="homepage" class="page active">
+        <div class="home-page">
+            <div class="home-card">
+                <div class="logo">🌐</div>
+                <h1>WebMaster Pro</h1>
+                <p class="subtitle">מערכת ניהול אתרים מתקדמת<br>בחר את סוג הגישה המתאים לך</p>
+                
+                <div class="access-buttons">
+                    <button class="access-btn client-btn" onclick="showGallery()">
+                        <span>👤</span>
+                        <span>גישת לקוח</span>
+                    </button>
+                    
+                    <button class="access-btn admin-btn" onclick="showAdmin()">
+                        <span>👑</span>
+                        <span>גישת מנהל</span>
+                    </button>
+                </div>
+            </div>
         </div>
+    </div>
 
-        <div class="loading" id="loading">
-            <div class="spinner"></div>
-            <p>טוען את המערכת...</p>
+    <!-- גלריית אתרים -->
+    <div id="gallery" class="page">
+        <div class="container">
+            <div class="header">
+                <button class="back-btn" onclick="showHome()">↩ חזרה למערכת</button>
+                <h1>🏪 גלריית אתרים</h1>
+                <p>ניהול וצפייה בכל הפרויקטים</p>
+            </div>
+
+            <div class="stats-bar">
+                <div class="stat-item">
+                    <div class="stat-number">2</div>
+                    <div class="stat-label">אתרים מוכנים</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">10</div>
+                    <div class="stat-label">בתכנון</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">₪6,200</div>
+                    <div class="stat-label">הכנסה פעילה</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">95%</div>
+                    <div class="stat-label">שביעות רצון</div>
+                </div>
+            </div>
+
+            <div class="websites-grid" id="websitesGrid">
+                <!-- האתרים יתווספו כאן -->
+            </div>
         </div>
+    </div>
 
-        <div class="features">
-            <h3>✨ תכונות המערכת:</h3>
-            <ul class="features-list">
-                <li>עורך אתרים כללי חכם</li>
-                <li>ניהול מרכזי של כל הפרויקטים</li>
-                <li>תצוגה מקדימה בזמן אמת</li>
-                <li>ממשק נפרד ללקוחות ומנהלים</li>
-                <li>שמירה אוטומטית של שינויים</li>
-                <li>ייצוא אתרים מלאים</li>
-            </ul>
+    <!-- עורך אתרים -->
+    <div id="editor" class="page">
+        <div class="container">
+            <div class="header">
+                <button class="back-btn" onclick="showGallery()">↩ חזרה לגלריה</button>
+                <h1 id="editorTitle">🖊️ עורך אתרים</h1>
+                <p>עריכה מתקדמת עם תצוגה מקדימה חיה</p>
+            </div>
+
+            <div class="editor-container">
+                <div class="editor-panel">
+                    <div class="panel-header">
+                        <span>🛠️ עורך התוכן</span>
+                        <span id="currentSiteName">קליניקת יופי פרמיום</span>
+                    </div>
+                    <div class="panel-content">
+                        <div class="success-message" id="successMessage">השינויים נשמרו בהצלחה! ✅</div>
+
+                        <div class="form-group">
+                            <label for="siteName">שם האתר:</label>
+                            <input type="text" id="siteName" placeholder="הכנס שם אתר...">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="siteTitle">כותרת ראשית:</label>
+                            <input type="text" id="siteTitle" placeholder="הכנס כותרת...">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="siteDescription">תיאור האתר:</label>
+                            <textarea id="siteDescription" placeholder="הכנס תיאור מפורט..."></textarea>
+                        </div>
+
+                        <div class="services-section">
+                            <h3>🌟 שירותים ומחירים
+                                <button class="btn btn-success" onclick="addService()">+ הוסף שירות</button>
+                            </h3>
+                            <div id="servicesContainer"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="phone">טלפון:</label>
+                            <input type="text" id="phone" placeholder="מספר טלפון...">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">אימייל:</label>
+                            <input type="email" id="email" placeholder="כתובת אימייל...">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="address">כתובת:</label>
+                            <input type="text" id="address" placeholder="כתובת פיזית...">
+                        </div>
+
+                        <div style="display: flex; gap: 10px; margin-top: 20px;">
+                            <button class="btn" style="background: #667eea; color: white;" onclick="saveChanges()">💾 שמור שינויים</button>
+                            <button class="btn" style="background: #28a745; color: white;" onclick="previewFullSite()">👁️ תצוגה מלאה</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="preview-panel">
+                    <div class="panel-header">
+                        <span>👁️ תצוגה מקדימה</span>
+                        <div class="live-indicator">LIVE</div>
+                    </div>
+                    <div class="panel-content" style="padding: 0;">
+                        <div class="preview-content" id="previewContent"></div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
-        function showLoading() {
-            document.getElementById('loading').style.display = 'block';
+        // נתוני המערכת
+        const websites = [
+            {
+                id: 'beauty-clinic',
+                name: 'קליניקת יופי פרמיום',
+                type: 'קליניקת יופי ואסתטיקה',
+                description: 'קליניקה מתקדמת לטיפולי יופי ואסתטיקה עם טכנולוגיות מתקדמות ושירות אישי מותאם לכל לקוח.',
+                status: 'ready',
+                title: '✨ קליניקת יופי פרמיום',
+                services: [
+                    { name: '💉 בוטוקס מתקדם', description: 'טיפול מתקדם להחלקת קמטים בטכנולוגיה החדישה', price: '₪800' },
+                    { name: '🌹 פילר היאלורוני', description: 'מילוי וחיטוב הפנים עם חומרי מילוי איכותיים', price: '₪1,200' },
+                    { name: '⚡ לייזר IPL', description: 'הסרת שיער וטיפוח עור בטכנולוגיית לייזר מתקדמת', price: '₪350' },
+                    { name: '✨ פנים זוהרות', description: 'טיפול חדשני להענקת זוהר טבעי לעור הפנים', price: '₪450' }
+                ],
+                contact: { phone: '03-1234567', email: 'info@beautyclinic.co.il', address: 'רחוב הרצל 45, תל אביב' }
+            },
+            {
+                id: 'interior-designer',
+                name: 'מעצב פנים יוקרתי',
+                type: 'עיצוב פנים ואדריכלות',
+                description: 'סטודיו מוביל לעיצוב פנים יוקרתי המתמחה ביצירת חללים ייחודיים ומותאמים אישית.',
+                status: 'ready',
+                title: '🎨 מעצב פנים יוקרתי',
+                services: [
+                    { name: '🏠 עיצוב דירות יוקרה', description: 'תכנון ועיצוב מלא של דירות יוקרה עם סגנון ייחודי', price: '₪15,000' },
+                    { name: '🏢 עיצוב משרדים', description: 'יצירת סביבת עבודה מעוררת השראה ופרודקטיבית', price: '₪25,000' },
+                    { name: '🍽️ עיצוב מסעדות', description: 'יצירת אווירה קולינרית ייחודית עם עיצוב מותאם', price: '₪35,000' }
+                ],
+                contact: { phone: '03-9876543', email: 'info@interiordesign.co.il', address: 'שדרות רוטשילד 88, תל אביב' }
+            }
+        ];
+
+        // אתרים בתכנון
+        const planningWebsites = [
+            { name: 'מסעדה גורמה', type: 'מסעדנות ואוכל' },
+            { name: 'מרכז כושר מתקדם', type: 'ספורט ובריאות' },
+            { name: 'קליניקת שיניים דיגיטלית', type: 'רפואת שיניים' },
+            { name: 'משרד עורכי דין', type: 'שירותים משפטיים' },
+            { name: 'סטודיו צילום מקצועי', type: 'צילום ועריכה' },
+            { name: 'סטארט-אפ טכנולוגיה', type: 'טכנולוגיה וחדשנות' },
+            { name: 'חברת ייעוץ עסקי', type: 'ייעוץ וניהול' },
+            { name: 'חנות אונליין מתקדמת', type: 'מסחר אלקטרוני' },
+            { name: 'חברת נדל"ן יוקרתית', type: 'נדל"ן והשקעות' },
+            { name: 'מרכז חינוכי דיגיטלי', type: 'חינוך והכשרה' }
+        ];
+
+        let currentSite = 'beauty-clinic';
+        let currentData = {};
+
+        // פונקציות ניווט
+        function showHome() {
+            hideAllPages();
+            document.getElementById('homepage').classList.add('active');
         }
 
-        function openClientPortal() {
-            showLoading();
-            // נניח זמן קצר לטעינה
-            setTimeout(() => {
-                try {
-                    window.location.href = '/websites-gallery.html';
-                } catch (error) {
-                    // fallback אם יש בעיה
-                    window.location.href = './websites-gallery.html';
-                }
-            }, 500);
+        function showGallery() {
+            hideAllPages();
+            document.getElementById('gallery').classList.add('active');
+            loadWebsites();
         }
 
-        function openAdminDashboard() {
+        function showAdmin() {
             const password = prompt('🔐 הכנס סיסמת מנהל:', 'admin123');
             if (password !== null && password.trim() !== '') {
-                showLoading();
-                setTimeout(() => {
-                    try {
-                        window.location.href = '/admin-dashboard.html';
-                    } catch (error) {
-                        // fallback אם יש בעיה
-                        window.location.href = './admin-dashboard.html';
-                    }
-                }, 500);
+                showGallery(); // לעכשיו - יכול להיות לוח בקרה נפרד בעתיד
             }
         }
 
-        // בדיקת תמיכה בדפדפן
+        function showEditor(siteId = 'beauty-clinic') {
+            hideAllPages();
+            document.getElementById('editor').classList.add('active');
+            loadEditor(siteId);
+        }
+
+        function hideAllPages() {
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+        }
+
+        // טעינת גלריה
+        function loadWebsites() {
+            const grid = document.getElementById('websitesGrid');
+            grid.innerHTML = '';
+
+            // אתרים מוכנים
+            websites.forEach(website => {
+                const card = createWebsiteCard(website, true);
+                grid.appendChild(card);
+            });
+
+            // אתרים בתכנון
+            planningWebsites.forEach(website => {
+                const card = createWebsiteCard(website, false);
+                grid.appendChild(card);
+            });
+        }
+
+        function createWebsiteCard(website, isReady) {
+            const card = document.createElement('div');
+            card.className = 'website-card';
+
+            const statusText = isReady ? '✅ מוכן לעריכה' : '🔧 בתכנון';
+            const headerClass = isReady ? 'ready' : '';
+
+            const editButton = isReady 
+                ? `<button class="btn btn-edit" onclick="showEditor('${website.id}')">🖊️ ערוך</button>`
+                : `<button class="btn" style="background: #ffc107; color: #333;" onclick="alert('האתר עדיין בתכנון!')">🚀 בקרוב</button>`;
+
+            const viewButton = isReady
+                ? `<button class="btn btn-view" onclick="viewWebsite('${website.id}')">👁️ צפה</button>`
+                : `<button class="btn" style="background: #6c757d; color: white;" disabled>👁️ צפה</button>`;
+
+            card.innerHTML = `
+                <div class="card-header ${headerClass}">
+                    <div class="status-badge">${statusText}</div>
+                    <div class="card-title">${website.name}</div>
+                    <div style="opacity: 0.9; font-size: 0.9rem;">${website.type}</div>
+                </div>
+                <div class="card-body">
+                    <div class="website-description">${website.description || 'אתר מקצועי ומתקדם שבבניה...'}</div>
+                    <div class="card-actions">
+                        ${editButton}
+                        ${viewButton}
+                    </div>
+                </div>
+            `;
+
+            return card;
+        }
+
+        // פונקציות עורך
+        function loadEditor(siteId) {
+            currentSite = siteId;
+            currentData = JSON.parse(JSON.stringify(websites.find(w => w.id === siteId)));
+
+            document.getElementById('currentSiteName').textContent = currentData.name;
+            document.getElementById('siteName').value = currentData.name;
+            document.getElementById('siteTitle').value = currentData.title;
+            document.getElementById('siteDescription').value = currentData.description;
+            document.getElementById('phone').value = currentData.contact.phone;
+            document.getElementById('email').value = currentData.contact.email;
+            document.getElementById('address').value = currentData.contact.address;
+
+            loadServices();
+            updatePreview();
+
+            // הוספת מאזיני אירועים
+            ['siteName', 'siteTitle', 'siteDescription', 'phone', 'email', 'address'].forEach(id => {
+                document.getElementById(id).addEventListener('input', updatePreview);
+            });
+        }
+
+        function loadServices() {
+            const container = document.getElementById('servicesContainer');
+            container.innerHTML = '';
+
+            currentData.services.forEach((service, index) => {
+                const serviceDiv = document.createElement('div');
+                serviceDiv.className = 'service-item';
+                serviceDiv.innerHTML = `
+                    <input type="text" placeholder="שם השירות" value="${service.name}" 
+                           onchange="updateService(${index}, 'name', this.value)">
+                    <textarea placeholder="תיאור השירות" 
+                           onchange="updateService(${index}, 'description', this.value)">${service.description}</textarea>
+                    <input type="text" placeholder="מחיר" value="${service.price}" 
+                           onchange="updateService(${index}, 'price', this.value)">
+                    <button class="btn btn-danger" onclick="removeService(${index})">🗑️ מחק</button>
+                `;
+                container.appendChild(serviceDiv);
+            });
+        }
+
+        function addService() {
+            currentData.services.push({
+                name: 'שירות חדש',
+                description: 'תיאור השירות החדש',
+                price: '₪0'
+            });
+            loadServices();
+            updatePreview();
+        }
+
+        function updateService(index, field, value) {
+            currentData.services[index][field] = value;
+            updatePreview();
+        }
+
+        function removeService(index) {
+            currentData.services.splice(index, 1);
+            loadServices();
+            updatePreview();
+        }
+
+        function updatePreview() {
+            currentData.name = document.getElementById('siteName').value;
+            currentData.title = document.getElementById('siteTitle').value;
+            currentData.description = document.getElementById('siteDescription').value;
+            currentData.contact.phone = document.getElementById('phone').value;
+            currentData.contact.email = document.getElementById('email').value;
+            currentData.contact.address = document.getElementById('address').value;
+
+            const preview = document.getElementById('previewContent');
+            
+            const servicesHTML = currentData.services.map(service => `
+                <div class="preview-service-card">
+                    <h3>${service.name}</h3>
+                    <p style="color: #666; margin-bottom: 10px;">${service.description}</p>
+                    <div class="preview-service-price">${service.price}</div>
+                </div>
+            `).join('');
+
+            preview.innerHTML = `
+                <div class="preview-header">
+                    <h1>${currentData.title}</h1>
+                    <p>${currentData.description}</p>
+                </div>
+                <div class="preview-services">
+                    <h2>🌟 השירותים שלנו</h2>
+                    <div class="preview-services-grid">
+                        ${servicesHTML}
+                    </div>
+                </div>
+                <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 40px 20px; text-align: center;">
+                    <h2 style="font-size: 2rem; margin-bottom: 20px; color: white;">📞 צור קשר</h2>
+                    <div style="font-size: 1.2rem; margin-bottom: 15px;">📱 טלפון: ${currentData.contact.phone}</div>
+                    <div style="font-size: 1.2rem; margin-bottom: 15px;">✉️ אימייל: ${currentData.contact.email}</div>
+                    <div style="font-size: 1.2rem;">📍 כתובת: ${currentData.contact.address}</div>
+                </div>
+            `;
+        }
+
+        function saveChanges() {
+            const message = document.getElementById('successMessage');
+            message.style.display = 'block';
+            setTimeout(() => {
+                message.style.display = 'none';
+            }, 3000);
+        }
+
+        function viewWebsite(siteId) {
+            const site = websites.find(w => w.id === siteId);
+            if (site) {
+                alert(`🌐 פותח תצוגה מלאה של "${site.name}"\n\nזה היה פותח חלון חדש עם האתר המלא!`);
+            }
+        }
+
+        function previewFullSite() {
+            alert(`👁️ תצוגה מלאה של "${currentData.name}"\n\nזה היה פותח חלון חדש עם האתר המלא עם כל העיצובים!`);
+        }
+
+        // טעינה ראשונית
         document.addEventListener('DOMContentLoaded', function() {
             console.log('🌐 WebMaster Pro System Loaded Successfully');
-            console.log('📊 System Status: Online');
-            console.log('🔧 Browser Support: ✅');
-            
-            // בדיקה שכל הקבצים קיימים
-            const requiredFiles = [
-                'websites-gallery.html',
-                'admin-dashboard.html', 
-                'universal-website-editor.html'
-            ];
-            
-            console.log('📋 Required Files Check:');
-            requiredFiles.forEach(file => {
-                console.log(`- ${file}: Expected`);
-            });
-        });
-
-        // מניעת שגיאות
-        window.addEventListener('error', function(e) {
-            console.error('🚨 System Error:', e.message);
-            alert('אירעה שגיאה במערכת. אנא נסה לרענן את הדף.');
+            showHome();
         });
     </script>
 </body>
