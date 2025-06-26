@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>גלריית אתרים - WebMaster Pro</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .stats-bar {
+            background: rgba(255,255,255,0.95);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 10px;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-label {
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .websites-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .website-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .website-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        }
+
+        .card-header {
+            padding: 20px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            position: relative;
+        }
+
+        .card-header.ready {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        .card-header.premium {
+            background: linear-gradient(135deg, #ffd89b 0%, #19547b 100%);
+        }
+
+        .status-badge {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .badge-ready {
+            background: rgba(76, 175, 80, 0.9);
+            color: white;
+        }
+
+        .badge-planning {
+            background: rgba(255, 152, 0, 0.9);
+            color: white;
+        }
+
+        .badge-premium {
+            background: rgba(255, 193, 7, 0.9);
+            color: #333;
+        }
+
+        .card-title {
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+            margin-top: 30px;
+        }
+
+        .card-type {
+            opacity: 0.9;
+            font-size: 0.9rem;
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .website-description {
+            color: #666;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .website-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-text {
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            text-align: center;
+            display: inline-block;
+        }
+
+        .btn-edit {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-edit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-view {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+
+        .btn-view:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(240, 147, 251, 0.4);
+        }
+
+        .btn-build {
+            background: linear-gradient(135deg, #ffd89b 0%, #19547b 100%);
+            color: white;
+        }
+
+        .btn-build:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 216, 155, 0.4);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(255,255,255,0.9);
+            color: #667eea;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .back-btn:hover {
+            background: white;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .websites-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-bar {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="back-btn" onclick="goBack()">↻ חזרה למערכת</button>
+
+    <div class="header">
+        <h1>🏪 גלריית אתרים</h1>
+        <p>ניהול וצפייה בכל הפרויקטים</p>
+    </div>
+
+    <div class="stats-bar">
+        <div class="stat-item">
+            <div class="stat-number" id="readyCount">2</div>
+            <div class="stat-label">אתרים מוכנים</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number" id="planningCount">10</div>
+            <div class="stat-label">בתכנון</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number">₪6,200</div>
+            <div class="stat-label">הכנסה פעילה</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number">95%</div>
+            <div class="stat-label">שביעות רצון</div>
+        </div>
+    </div>
+
+    <div class="websites-grid" id="websitesGrid">
+        <!-- האתרים יתווספו כאן דינמית -->
+    </div>
+
+    <script>
+        // נתוני האתרים
+        const websites = [
+            {
+                id: 'beauty-clinic',
+                name: 'קליניקת יופי פרמיום',
+                type: 'קליניקת יופי ואסתטיקה',
+                description: 'קליניקה מתקדמת לטיפולי יופי ואסתטיקה עם טכנולוגיות מתקדמות ושירות אישי מותאם לכל לקוח.',
+                status: 'ready',
+                isPremium: true,
+                stats: {
+                    visitors: '1,250',
+                    revenue: '₪3,200',
+                    satisfaction: '96%'
+                }
+            },
+            {
+                id: 'interior-designer',
+                name: 'מעצב פנים יוקרתי',
+                type: 'עיצוב פנים ואדריכלות',
+                description: 'סטודיו מוביל לעיצוב פנים יוקרתי המתמחה ביצירת חללים ייחודיים ומותאמים אישית.',
+                status: 'ready',
+                isPremium: false,
+                stats: {
+                    visitors: '890',
+                    revenue: '₪3,000',
+                    satisfaction: '94%'
+                }
+            },
+            {
+                id: 'restaurant',
+                name: 'מסעדה גורמה',
+                type: 'מסעדנות ואוכל',
+                description: 'מסעדה יוקרתית המציעה חווית אוכל גורמה עם שף מוביל ותפריט מתחלף עונתית.',
+                status: 'planning',
+                stats: { visitors: '0', revenue: '₪0', satisfaction: '0%' }
+            },
+            {
+                id: 'fitness-center',
+                name: 'מרכז כושר מתקדם',
+                type: 'ספורט ובריאות',
+                description: 'מרכז כושר חדשני עם ציוד מתקדם, מדריכים מקצועיים ותוכניות אימון מותאמות אישית.',
+                status: 'planning',
+                stats: { visitors: '0', revenue: '₪0', satisfaction: '0%' }
+            },
+            {
+                id: 'dental-clinic',
+                name: 'קליניקת שיניים דיגיטלית',
+                type: 'רפואת שיניים',
+                description: 'קליניקה מתקדמת לרפואת שיניים עם טכנולוגיה דיגיטלית מובילה ושירות מקצועי ברמה הגבוהה ביותר.',
+                status: 'planning',
+                stats: { visitors: '0', revenue: '₪0', satisfaction: '0%' }
+            },
+            {
+                id: 'law-firm',
+                name: 'משרד עורכי דין',
+                type: 'שירותים משפטיים',
+                description: 'משרד עורכי דין מוביל המתמחה במשפט עסקי, נדל"ן ודיני משפחה עם ניסיון רב ומוניטין מעולה.',
+                status: 'planning',
+                stats: { visitors: '0', revenue: '₪0', satisfaction: '0%' }
+            },
+            {
+                id: 'photography-studio',
+                name: 'סטודיו צילום מקצועי',
+                type: 'צילום ועריכה',
+                description: 'סטודיו צילום מקצועי המתמחה בצילומי אירועים, פרטרטים ותדמית עסקית ברמה הגבוהה ביותר.',
+                status: 'planning',
+                stats: { visitors: '0', revenue: '₪0', satisfaction: '0%' }
+            },
+            {
+                id: 'tech-startup',
+                name: 'סטארט-אפ טכנולוגיה',
+                type: 'טכנולוגיה וחדשנות',
+                description: 'חברה טכנולוגית מובילה המפתחת פתרונות חדשניים בתחום הבינה המלאכותית וביג דאטה.',
+                status: 'planning',
+                stats: { visitors: '0', revenue: '₪0', satisfaction: '0%' }
+            },
+            {
+                id: 'consulting-firm',
+                name: 'חברת ייעוץ עסקי',
+                type: 'ייעוץ וניהול',
+                description: 'חברת ייעוץ מובילה המתמחה בשיפור תהליכים עסקיים, אסטרטגיה ופיתוח ארגוני.',
+                status: 'planning',
+                stats: { visitors: '0', revenue: '₪0', satisfaction: '0%' }
+            },
+            {
+                id: 'online-store',
+                name: 'חנות אונליין מתקדמת',
+                type: 'מסחר אלקטרוני',
+                description: 'פלטפורמת מסחר אלקטרוני מתקדמת עם מערכת ניהול מלאי חכמה ומעקב הזמנות בזמן אמת.',
+                status: 'planning',
+                stats: { visitors: '0', revenue: '₪0', satisfaction: '0%' }
+            },
+            {
+                id: 'real-estate',
+                name: 'חברת נדל"ן יוקרתית',
+                type: 'נדל"ן והשקעות',
+                description: 'חברת נדל"ן מובילה המתמחה בנכסי יוקרה, השקעות ופיתוח פרויקטים נדל"ניים מתקדמים.',
+                status: 'planning',
+                stats: { visitors: '0', revenue: '₪0', satisfaction: '0%' }
+            },
+            {
+                id: 'educational-center',
+                name: 'מרכז חינוכי דיגיטלי',
+                type: 'חינוך והכשרה',
+                description: 'מרכז חינוכי מתקדם המציע קורסים דיגיטליים, הכשרות מקצועיות ותוכניות למידה מותאמות אישית.',
+                status: 'planning',
+                stats: { visitors: '0', revenue: '₪0', satisfaction: '0%' }
+            }
+        ];
+
+        // פונקציה לטעינת האתרים
+        function loadWebsites() {
+            const grid = document.getElementById('websitesGrid');
+            grid.innerHTML = '';
+
+            websites.forEach(website => {
+                const card = createWebsiteCard(website);
+                grid.appendChild(card);
+            });
+        }
+
+        // פונקציה ליצירת כרטיס אתר
+        function createWebsiteCard(website) {
+            const card = document.createElement('div');
+            card.className = 'website-card';
+
+            const statusText = website.status === 'ready' ? '✅ מוכן לעריכה' : '🔧 בתכנון';
+            const statusClass = website.status === 'ready' ? 'badge-ready' : 'badge-planning';
+            const headerClass = website.isPremium ? 'premium' : (website.status === 'ready' ? 'ready' : '');
+
+            const editButton = website.status === 'ready' 
+                ? `<button class="btn btn-edit" onclick="editWebsite('${website.id}')">🖊️ ערוך</button>`
+                : `<button class="btn btn-build" onclick="startBuilding('${website.id}')">🚀 התחל בנייה</button>`;
+
+            const viewButton = website.status === 'ready'
+                ? `<button class="btn btn-view" onclick="viewWebsite('${website.id}')">👁️ צפה</button>`
+                : `<button class="btn btn-view" disabled>👁️ צפה</button>`;
+
+            card.innerHTML = `
+                <div class="card-header ${headerClass}">
+                    <div class="status-badge ${statusClass}">${statusText}</div>
+                    <div class="card-title">${website.name}</div>
+                    <div class="card-type">${website.type}</div>
+                </div>
+                <div class="card-body">
+                    <div class="website-description">${website.description}</div>
+                    <div class="website-stats">
+                        <div class="stat">
+                            <div class="stat-value">${website.stats.visitors}</div>
+                            <div class="stat-text">מבקרים</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">${website.stats.revenue}</div>
+                            <div class="stat-text">הכנסה</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">${website.stats.satisfaction}</div>
+                            <div class="stat-text">שביעות רצון</div>
+                        </div>
+                    </div>
+                    <div class="card-actions">
+                        ${editButton}
+                        ${viewButton}
+                    </div>
+                </div>
+            `;
+
+            return card;
+        }
+
+        // פונקציות לפעולות
+        function editWebsite(websiteId) {
+            if (websiteId === 'beauty-clinic' || websiteId === 'interior-designer') {
+                window.open('universal-website-editor.html?site=' + websiteId, '_blank');
+            } else {
+                alert('העורך עדיין לא מוכן לאתר זה.\nהאתר עדיין בשלב התכנון.');
+            }
+        }
+
+        function viewWebsite(websiteId) {
+            if (websiteId === 'beauty-clinic') {
+                // יצירת אתר קליניקת יופי מלא
+                const fullSite = createBeautyClinicSite();
+                const newWindow = window.open('', '_blank');
+                newWindow.document.write(fullSite);
+                newWindow.document.close();
+            } else if (websiteId === 'interior-designer') {
+                // יצירת אתר מעצב פנים מלא
+                const fullSite = createInteriorDesignerSite();
+                const newWindow = window.open('', '_blank');
+                newWindow.document.write(fullSite);
+                newWindow.document.close();
+            } else {
+                alert('האתר עדיין לא מוכן לצפייה.\nהאתר עדיין בשלב התכנון.');
+            }
+        }
+
+        function startBuilding(websiteId) {
+            alert(`🚀 תהליך הבנייה של האתר יחל בקרוב!\n\nהאתר "${websites.find(w => w.id === websiteId).name}" ייכנס לשלב הפיתוח במהלך השבועיים הקרובים.\n\nנעדכן אותך ברגע שהעורך יהיה מוכן!`);
+        }
+
+        function goBack() {
+            window.location.href = 'access-router.html';
+        }
+
+        // פונקציה ליצירת אתר קליניקת יופי מלא
+        function createBeautyClinicSite() {
+            return `<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>קליניקת יופי פרמיום - טיפולי יופי מתקדמים</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; }
+        .header { background: linear-gradient(135deg, #ffd89b 0%, #19547b 100%); color: white; padding: 50px 20px; text-align: center; }
+        .header h1 { font-size: 3rem; margin-bottom: 20px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
+        .header p { font-size: 1.3rem; opacity: 0.9; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        .services { padding: 80px 0; background: #f8f9fa; }
+        .services h2 { text-align: center; font-size: 2.5rem; margin-bottom: 50px; color: #19547b; }
+        .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+        .service-card { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); transition: transform 0.3s ease; }
+        .service-card:hover { transform: translateY(-10px); }
+        .service-card h3 { color: #19547b; margin-bottom: 15px; font-size: 1.4rem; }
+        .service-card p { color: #666; margin-bottom: 15px; }
+        .service-price { font-size: 1.3rem; font-weight: bold; color: #ffd89b; }
+        .contact { padding: 80px 0; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; text-align: center; }
+        .contact h2 { font-size: 2.5rem; margin-bottom: 30px; }
+        .contact-info { font-size: 1.2rem; margin-bottom: 15px; }
+        .edit-btn { position: fixed; bottom: 20px; right: 20px; background: #19547b; color: white; border: none; padding: 15px 25px; border-radius: 50px; cursor: pointer; font-weight: bold; box-shadow: 0 5px 15px rgba(0,0,0,0.3); transition: all 0.3s ease; z-index: 1000; }
+        .edit-btn:hover { background: #ffd89b; color: #19547b; transform: translateY(-3px); }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <h1>✨ קליניקת יופי פרמיום</h1>
+            <p>טיפולי יופי ואסתטיקה ברמה הגבוהה ביותר</p>
+        </div>
+    </header>
+
+    <section class="services">
+        <div class="container">
+            <h2>🌟 השירותים שלנו</h2>
+            <div class="services-grid">
+                <div class="service-card">
+                    <h3>💉 בוטוקס מתקדם</h3>
+                    <p>טיפול מתקדם להחלקת קמטים בטכנולוגיה החדישה</p>
+                    <div class="service-price">₪800</div>
+                </div>
+                <div class="service-card">
+                    <h3>🌹 פילר היאלורוני</h3>
+                    <p>מילוי וחיטוב הפנים עם חומרי מילוי איכותיים</p>
+                    <div class="service-price">₪1,200</div>
+                </div>
+                <div class="service-card">
+                    <h3>⚡ לייזר IPL</h3>
+                    <p>הסרת שיער וטיפוח עור בטכנולוגיית לייזר מתקדמת</p>
+                    <div class="service-price">₪350</div>
+                </div>
+                <div class="service-card">
+                    <h3>✨ פנים זוהרות</h3>
+                    <p>טיפול חדשני להענקת זוהר טבעי לעור הפנים</p>
+                    <div class="service-price">₪450</div>
+                </div>
+                <div class="service-card">
+                    <h3>💎 פילינג יהלומים</h3>
+                    <p>פילינג מתקדם לחידוש והחלקת המרקם</p>
+                    <div class="service-price">₪320</div>
+                </div>
+                <div class="service-card">
+                    <h3>🎯 טיפוח מותאם</h3>
+                    <p>טיפולים מותאמים אישית לפי סוג העור</p>
+                    <div class="service-price">₪280</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="contact">
+        <div class="container">
+            <h2>📞 צור קשר</h2>
+            <div class="contact-info">📱 טלפון: 03-1234567</div>
+            <div class="contact-info">✉️ אימייל: info@beautyclinic.co.il</div>
+            <div class="contact-info">📍 כתובת: רחב הרצל 45, תל אביב</div>
+        </div>
+    </section>
+
+    <button class="edit-btn" onclick="editSite()">🖊️ ערוך אתר</button>
+
+    <script>
+        function editSite() {
+            window.open('universal-website-editor.html?site=beauty-clinic', '_blank');
+        }
+    </script>
+</body>
+</html>`;
+        }
+
+        // פונקציה ליצירת אתר מעצב פנים מלא
+        function createInteriorDesignerSite() {
+            return `<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מעצב פנים יוקרתי - עיצוב חללים ייחודיים</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; }
+        .header { background: linear-gradient(135deg, #9d50bb 0%, #6e48aa 100%); color: white; padding: 50px 20px; text-align: center; }
+        .header h1 { font-size: 3rem; margin-bottom: 20px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
+        .header p { font-size: 1.3rem; opacity: 0.9; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        .services { padding: 80px 0; background: #f8f9fa; }
+        .services h2 { text-align: center; font-size: 2.5rem; margin-bottom: 50px; color: #6e48aa; }
+        .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+        .service-card { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); transition: transform 0.3s ease; }
+        .service-card:hover { transform: translateY(-10px); }
+        .service-card h3 { color: #6e48aa; margin-bottom: 15px; font-size: 1.4rem; }
+        .service-card p { color: #666; margin-bottom: 15px; }
+        .service-price { font-size: 1.3rem; font-weight: bold; color: #9d50bb; }
+        .contact { padding: 80px 0; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; text-align: center; }
+        .contact h2 { font-size: 2.5rem; margin-bottom: 30px; }
+        .contact-info { font-size: 1.2rem; margin-bottom: 15px; }
+        .edit-btn { position: fixed; bottom: 20px; right: 20px; background: #6e48aa; color: white; border: none; padding: 15px 25px; border-radius: 50px; cursor: pointer; font-weight: bold; box-shadow: 0 5px 15px rgba(0,0,0,0.3); transition: all 0.3s ease; z-index: 1000; }
+        .edit-btn:hover { background: #9d50bb; transform: translateY(-3px); }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <h1>🎨 מעצב פנים יוקרתי</h1>
+            <p>יוצרים חללים ייחודיים שמספרים את הסיפור שלכם</p>
+        </div>
+    </header>
+
+    <section class="services">
+        <div class="container">
+            <h2>🏡 השירותים שלנו</h2>
+            <div class="services-grid">
+                <div class="service-card">
+                    <h3>🏠 עיצוב דירות יוקרה</h3>
+                    <p>תכנון ועיצוב מלא של דירות יוקרה עם סגנון ייחודי</p>
+                    <div class="service-price">₪15,000</div>
+                </div>
+                <div class="service-card">
+                    <h3>🏢 עיצוב משרדים</h3>
+                    <p>יצירת סביבת עבודה מעוררת השראה ופרודקטיבית</p>
+                    <div class="service-price">₪25,000</div>
+                </div>
+                <div class="service-card">
+                    <h3>🍽️ עיצוב מסעדות</h3>
+                    <p>יצירת אווירה קולינרית ייחודית עם עיצוב מותאם</p>
+                    <div class="service-price">₪35,000</div>
+                </div>
+                <div class="service-card">
+                    <h3>💡 ייעוץ עיצוב</h3>
+                    <p>ייעוץ מקצועי לתכנון ועיצוב החלל המושלם</p>
+                    <div class="service-price">₪500/שעה</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="contact">
+        <div class="container">
+            <h2>📞 צור קשר</h2>
+            <div class="contact-info">📱 טלפון: 03-9876543</div>
+            <div class="contact-info">✉️ אימייל: info@interiordesign.co.il</div>
+            <div class="contact-info">📍 כתובת: שדרות רוטשילד 88, תל אביב</div>
+        </div>
+    </section>
+
+    <button class="edit-btn" onclick="editSite()">🖊️ ערוך אתר</button>
+
+    <script>
+        function editSite() {
+            window.open('universal-website-editor.html?site=interior-designer', '_blank');
+        }
+    </script>
+</body>
+</html>`;
+        }
+
+        // טעינת האתרים בעת פתיחת הדף
+        document.addEventListener('DOMContentLoaded', loadWebsites);
+    </script>
+</body>
+</html>
