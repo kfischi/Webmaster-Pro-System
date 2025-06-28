@@ -1,0 +1,20 @@
+{
+  "name": "webmaster-pro",
+  "version": "2.0.0",
+  "description": "אדיטור ויזואלי מתקדם לבניית אתרים עסקיים",
+  "main": "index.html",
+  "scripts": {
+    "dev": "python -m http.server 8000",
+    "build": "echo 'Build complete'",
+    "deploy": "echo 'Deploying to Netlify...'"
+  },
+  "keywords": [
+    "website-builder",
+    "visual-editor",
+    "hebrew",
+    "business-websites"
+  ],
+  "author": "WebMaster Pro Team",
+  "license": "MIT",
+  "homepage": "https://webmaster-pro.netlify.app"
+}
